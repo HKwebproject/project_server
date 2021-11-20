@@ -17,7 +17,7 @@ const userSchema = mongoose.Schema({
         unique: 1,
         required: true
     },
-    // objectId 사용 고려
+    // ObjectId 사용 고려
     id:{
         type: Number,
         trim: true,
