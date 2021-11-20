@@ -35,7 +35,7 @@ const userSchema = mongoose.Schema({
     },
     role:{
         type: Number,
-        default: 0      // 0: 미승인자, 1: 승인자, 2: 관리자
+        default: 0           // 0: 미승인자, 1: 승인자, 2: 관리자
     },
     birth:{
         type: Date,
@@ -72,8 +72,8 @@ userSchema.pre("save", function(next) {
 
 userSchema.methods.comparePassword = function (myPlainPassword, cb) {
     bcrypt.compare(myPlainPassword, this.password, function (err, isMatch) {
-      if (err) return cb(err); //파라미터의 콜백함수로 결과 전달
-      cb(null, isMatch); //파라미터의 콜백함수로 결과 전달
+      if (err) return cb(err);
+      cb(null, isMatch);
     });
 };
 

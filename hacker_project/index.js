@@ -38,24 +38,18 @@ app.post("/login", (req, res) => {
             });
         }
     
-        //2. db에 해당 이메일이 있다면 비밀번호가 같은지 확인
-        //models/User.js 안에 해당 함수를 해줘야 함
         user.comparePassword(req.body.password, (err, isMatch) => {
-          //(models/User.js 참고) 콜백함수의 파라미터로 결과가 전달되므로
           if (!isMatch) {
-              //console.log(err)
             return res.json({
               loginSuccess: false,
               message: "비밀번호가 틀렸습니다",
             });
           }
-          //3. 비밀번호까지 같다면 token을 생성
-          //이것도 comparePassword 처럼 models/User.js에서 우리가 직접 메서드 만듦
           user.generateToken((err, user) => {
             if (err) return res.status(400).send(err); 
             res.cookie("h_auth", user.token)
               .status(200)
-              .json({ loginSuccess: true, userId: user._id }); //x_auth라는 이름으로 토큰 값이 쿠키에 저장됨
+              .json({ loginSuccess: true, userId: user._id }); 
           });
         });
       });
@@ -69,13 +63,28 @@ app.get("/",(req,res)=>{
 app.get('/auth', auth ,(req, res) => {
      res.status(200).json({
          _id: req.user._id,
-         isAdmin: req.user.role === 0 ? false: true, // 3개
+         isAdmin: req.user.role === 2 ? true: false, // 3개 수정필요.
          isAuth : true,
          email: req.user.email,
          name: req.user.name,
          role: req.user.role,
+        // image: req.user.image
      })
  })
+
+ app.get('/logout', auth, (req, res) => {
+    User.findOneAndUpdate({_id: req.user._id},
+        { token: "" },
+        (err, user) => {
+            if(err){
+              console.log(err);
+              return res.json({success:false, err});
+            } 
+            return res.status(200).send({
+                success: true
+            })
+        })
+})
 
 
 app.listen(port,()=>{
