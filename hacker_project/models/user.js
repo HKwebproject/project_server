@@ -12,17 +12,17 @@ const userSchema = mongoose.Schema({
     name:{ 
         type: String,
         maxlength: 10,
-        required: true
+        required: false
     },
     email:{
         type: String,
         trim: true,
         unique: 1,
-        required: true
+        required: false
     },
     // ObjectId 사용 고려
     id:{
-        type: String,
+        type: String, // 숫자10자리 제한 이거 아니면 잘못된 형식이다.
         trim: true,
         unique: 1,
         required: true
@@ -37,7 +37,7 @@ const userSchema = mongoose.Schema({
         type: Number,
         default: 0           // 0: 미승인자, 1: 승인자, 2: 관리자
     },
-    birth:{
+    birth:{ // register 할 때만.
         type: Date,
         default: Date.now
     },
